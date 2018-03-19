@@ -41,7 +41,7 @@ def graph_form():
                        'callback_url': 'http://service1:5000/task_result'
                        }]
             requests.post('http://service2:5000', json=params)
-            return redirect(url_for('graph', graph_id=graph.id))
+            return redirect(url_for('showgraph', graph_id=graph.id))
         except psycopg2.Error as e:
             app.logger.warning('Service1 graph form db error.{}'.format(e))
         except requests.RequestException as e:
