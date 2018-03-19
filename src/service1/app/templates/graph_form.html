@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<p>
+<h1>Add graph</h1>
+<form action="" method="post" name="graph">
+    {{form.hidden_tag()}}
+    <p>
+        Please enter <br>
+        formula: {{form.formula(size=80)}},<br>
+        period: {{form.period(size=80)}},<br>
+        step: {{form.step(size=80)}}<br>
+    </p>
+    <p><input type="submit" value="Add graph"></p>
+</form>
+{% endblock %}

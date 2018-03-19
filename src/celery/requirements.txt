@@ -1,0 +1,8 @@
+celery==4.1.0
+# Flask==0.12.2
+# Flask-Mail==0.9.1
+redis==2.10.6
+psycopg2==2.7.4
+requests==2.18.4
+#grequests==0.3.0
+SQLAlchemy==1.2.5

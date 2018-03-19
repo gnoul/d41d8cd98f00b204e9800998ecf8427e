@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}
+   Index
+{% endblock %}
+{% block content %}
+<p>
+    <select name="actions">
+        <option value="update">Обновить</option>
+    </select>
+    <input type="button" id="execbutton" value="Выполнить">
+    <input type="button" id="addbutton" value="Добавить">
+</p>
+
+<table id="graphs-table">
+    <thead>
+    <tr>
+        <th><input type="checkbox" name="select_all"></th>
+        <th>Функция</th>
+        <th>График</th>
+        <th>Интервал</th>
+        <th>Шаг обработки</th>
+        <th>Дата</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for graph in graphs %}
+    <tr>
+        <td><input type="checkbox" class="graph" name="{{ graph.id }}"></td>
+        <td><a href="{{ url_for('showgraph', graph_id=graph.id) }}">{{ graph.formula }}</a></td>
+        <td>{% if graph.image %}
+            <img src="/{{ graph.image }}" height="100" width="100">
+            {% else %}
+            {{ graph.status }}
+            {% endif %}
+        </td>
+        <td>{{ graph.period }}</td>
+        <td>{{ graph.step }}</td>
+        <td>{{ graph.updated }}</td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+    <script type="application/javascript">
+    var urlforgraph="{{ url_for('graph_form') }}";
+    var urlforbatchtask="{{ url_for('batchtask') }}";
+    </script>
+<script type="application/javascript" src="/js/index.js"></script>
+{% endblock %}

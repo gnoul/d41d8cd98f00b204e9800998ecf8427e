@@ -1,0 +1,15 @@
+celery==4.1.0
+Flask==0.12.2
+redis==2.10.6
+requests==2.18.4
+psycopg2==2.7.4
+#grequests==0.3.0
+
+SQLAlchemy==1.2.5
+sqlalchemy-migrate==0.11.0
+Flask-SQLAlchemy==2.3.2
+WTForms==2.1
+Flask-WTF==0.14.2
+# Flask-Migrate==2.1.1
+
+Flask-Script==2.0.6

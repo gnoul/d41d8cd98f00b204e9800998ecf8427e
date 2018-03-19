@@ -1,0 +1,82 @@
+version: '2'
+services:
+  postgresql:
+    image: postgres:9.3
+    hostname: db
+    env_file: env
+    volumes:
+      - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata
+#      - ./dockerfiles/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  redis:
+      image: redis:3
+      hostname: redis
+      env_file: env
+      ports:
+      - "6379:6379"
+
+  rabbit:
+      hostname: rabbit
+      image: rabbitmq:3.6.0
+      env_file: env
+      ports:
+        - "5672:5672"
+        - "15672:15672"
+
+  charts:
+      image: onsdigital/highcharts-export-node
+      hostname: charts
+      ports:
+      - "8889:8080"
+
+  worker:
+    env_file: env
+    build: ./src/celery
+    volumes:
+      - ./src/celery:/opt/celery
+      - ./dockerfiles/images:/opt/celery/images
+    working_dir: /opt/celery
+    links:
+      - "rabbit"
+      - "redis"
+      - "postgresql:db"
+      - "charts"
+
+    command: bash -c "sleep 10 && celery -A tasks.celery worker --loglevel=info"
+
+  service1:
+    hostname: service1
+    build: ./src/service1
+    env_file: env
+    working_dir: /opt/service1
+    command: bash -c "sleep 5 && python run.py"
+    volumes:
+      - ./src/service1:/opt/service1
+      - ./dockerfiles/id_rsa.pub:/root/.ssh/authorized_keys
+      - ./dockerfiles/images:/opt/service1/app/images
+#      - ./root/.pycharm_helpers/:/root/.pycharm_helpers/
+    links:
+      - "rabbit"
+      - "redis"
+      - "postgresql:db"
+    ports:
+      - "5001:5000"
+
+  service2:
+    hostname: service2
+    build: ./src/service2
+    env_file: env
+    working_dir: /opt/service2
+    command: bash -c "sleep 5 && python run.py"
+    volumes:
+      - ./src/service2:/opt/service2
+      - ./dockerfiles/id_rsa.pub:/root/.ssh/authorized_keys
+#      - ./root/.pycharm_helpers/:/root/.pycharm_helpers/
+    links:
+      - "rabbit"
+      - "redis"
+      - "postgresql:db"
+    ports:
+      - "5002:5000"

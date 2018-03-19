@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<p>
+{% if graph %}
+
+Formula: {{ graph.formula }}<br>
+Step: {{ graph.step }}<br>
+Updated: {{ graph.updated }}<br>
+Status: {{ graph.status }}<br>
+    <img src="/{{ graph.image }}" height="300" width="300">
+{% else %}
+    No graph for this id
+{% endif %}
+</p>
+{% endblock %}
