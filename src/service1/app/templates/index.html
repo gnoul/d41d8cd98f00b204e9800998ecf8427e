@@ -4,14 +4,14 @@
 {% endblock %}
 {% block content %}
     <p>
-        <select name="actions">
+        <select name="actions" class="mr-sm-2">
             <option value="update">Обновить</option>
         </select>
-        <input type="button" id="execbutton" value="Выполнить">
-        <input type="button" id="addbutton" value="Добавить">
+        <input type="button" class="btn" id="execbutton" value="Выполнить">
+        <input type="button" class="btn" id="addbutton" value="Добавить">
     </p>
 
-    <table id="graphs-table">
+    <table id="graphs-table" class="table table-">
         <thead>
         <tr>
             <th><input type="checkbox" name="select_all"></th>
