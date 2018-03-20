@@ -17,10 +17,11 @@ def index():
     return redirect(url_for('index'))
 
 
+@app.route('/graph/<graph_id>/<status>', methods=['GET'])
 @app.route('/graph/<graph_id>', methods=['GET'])
-def showgraph(graph_id=None):
+def showgraph(graph_id=None, status=None):
     graph = Graphs.query.get(graph_id)
-    return render_template('graph.html', graph=graph)
+    return render_template('graph.html', graph=graph, status=status)
 
 
 @app.route('/graph_form', methods=['GET', 'POST'])
@@ -41,15 +42,28 @@ def graph_form():
                        'callback_url': 'http://service1:5000/task_result'
                        }]
             requests.post('http://service2:5000', json=params)
-            return redirect(url_for('showgraph', graph_id=graph.id))
+            return redirect(url_for('showgraph', graph_id=graph.id, status=graph.status))
         except psycopg2.Error as e:
             app.logger.warning('Service1 graph form db error.{}'.format(e))
         except requests.RequestException as e:
             app.logger.warning('Service1 graph form request error.{}'.format(e))
-        return redirect(url_for('graph', graph_id=0))
+        # При возникновении ошибки переходим на страницу с несуществующим графиком
+        return redirect(url_for('showgraph', graph_id=0))
     return render_template('graph_form.html',
                            title='Add graph',
                            form=form)
+
+
+@app.route('/graphtatus', methods=['POST'])
+def graphstatus():
+    data = request.json
+    # Используем список с pk графиков для проверки статуса пакетного задания
+    statuses = []
+    for graph_id in data:
+        graph = Graphs.query.get(graph_id)
+        if graph:
+            statuses.append({'id': graph.id, 'status': graph.status})
+    return jsonify(statuses)
 
 
 @app.route('/batchtask', methods=['POST'])

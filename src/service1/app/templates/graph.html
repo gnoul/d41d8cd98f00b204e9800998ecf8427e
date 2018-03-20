@@ -1,15 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-<p>
-{% if graph %}
+    <p>
+    {% if graph %}
+        Formula: {{ graph.formula }}<br>
+        Step: {{ graph.step }}<br>
+        Updated: {{ graph.updated }}
+        {% if graph.image %}
+    </p>
+        <img src="/{{ graph.image }}" height="300" width="300">
+        {% endif %}
+        <div id="statusdiv">Status: {{ graph.status }}</div>
+    {% else %}
+        No graph for this id or error creating Graphic.
+    {% endif %}
 
-Formula: {{ graph.formula }}<br>
-Step: {{ graph.step }}<br>
-Updated: {{ graph.updated }}<br>
-Status: {{ graph.status }}<br>
-    <img src="/{{ graph.image }}" height="300" width="300">
-{% else %}
-    No graph for this id
-{% endif %}
-</p>
+{% endblock %}
+
+{%  block scripts  %}
+    <script type="application/javascript">
+        {% if status %}
+        var status = "{{ status }}";
+        {% else %}
+        var status = 'notset';
+        {% endif %}
+        {% if graph %}
+        var graph_id ={{ graph.id}};
+        {% endif %}
+        var urlforcheckstatus="{{ url_for('graphstatus') }}";
+        var urlforindex="{{ url_for('index') }}";
+    </script>
+    <script type="application/javascript" src="/js/status.js"></script>
 {% endblock %}
