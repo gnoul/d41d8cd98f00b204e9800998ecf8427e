@@ -29,6 +29,10 @@ docker-compose run service1 python db_create.py
 ``` shell
 docker-compose up -d
 ```
+Для запуска тестов выполните при запущенном окружении:
+``` shell
+docker-compose run worker python -m unittest tests.py
+```
 
 Формулу необходимо задавать используя переменную t.
 
@@ -44,3 +48,6 @@ docker-compose up -d
 - Год: **y**
 
 Например 2 часа записывается как **'2h'**
+
+Сгенерированные изображения собираются в каталог общий для service1 и worker.
+В service1 передается только путь к изображению

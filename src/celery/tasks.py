@@ -64,7 +64,8 @@ def callback(params, stage=None):
             'graph_task_id': params.get('graph_task_id'),
             'graph_id': params.get('graph_id'),
             'stage': stage}
-    requests.post(url, json=data)
+    if url:
+        requests.post(url, json=data)
     return celery.current_task.request.id, stage
 
 
@@ -72,8 +73,8 @@ def callback(params, stage=None):
 def gengraph(params):
     task_id = params.get('db_task_id')
     task = celery.AsyncResult(task_id)
-    while not task.status == 'SUCCESS':
-        pass
+    # while not task.status == 'SUCCESS':
+    #     pass
     results = task.result
     points = results.get('result')
     graph_id = results.get('graph_id')
